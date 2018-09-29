@@ -1,0 +1,607 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'M2M Markdown'#36681#25563#33267'MOBI'#24037#20855
+  ClientHeight = 479
+  ClientWidth = 709
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnClose = FormClose
+  DesignerMasterStyle = 0
+  object Panel1: TPanel
+    Align = MostTop
+    Size.Width = 709.000000000000000000
+    Size.Height = 161.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    ParentShowHint = False
+    ShowHint = True
+    object Label1: TLabel
+      StyledSettings = [Style, FontColor]
+      Position.X = 16.000000000000000000
+      Position.Y = 22.000000000000000000
+      TextSettings.Font.Family = 'Microsoft JhengHei'
+      TextSettings.Font.Size = 14.000000000000000000
+      Text = 'Markdown'#27284#21517
+      TabOrder = 2
+    end
+    object edtMarkdown: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 3
+      TextSettings.Font.Size = 14.000000000000000000
+      Position.X = 136.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 401.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      StyledSettings = [Family, Style, FontColor]
+    end
+    object btnOpenFile: TSpeedButton
+      Cursor = crHandPoint
+      Hint = #38283#21855#27284#26696#32317#31649
+      Images = ImageList1
+      ImageIndex = 0
+      Position.X = 544.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 25.000000000000000000
+      Size.Height = 35.000000000000000000
+      Size.PlatformDefault = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = btnOpenFileClick
+    end
+    object Label2: TLabel
+      Anchors = [akTop]
+      StyledSettings = [Style, FontColor]
+      Position.X = 17.000000000000000000
+      Position.Y = 88.000000000000000000
+      Size.Width = 97.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Family = 'Microsoft JhengHei'
+      TextSettings.Font.Size = 14.000000000000000000
+      TextSettings.HorzAlign = Trailing
+      Text = #26360#21517
+      TabOrder = 1
+    end
+    object edtTitle: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 6
+      TextSettings.Font.Size = 14.000000000000000000
+      Position.X = 136.000000000000000000
+      Position.Y = 82.000000000000000000
+      Size.Width = 281.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      StyledSettings = [Family, Style, FontColor]
+    end
+    object Label3: TLabel
+      Anchors = [akTop]
+      StyledSettings = [Style, FontColor]
+      Position.X = 17.000000000000000000
+      Position.Y = 128.000000000000000000
+      Size.Width = 97.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Family = 'Microsoft JhengHei'
+      TextSettings.Font.Size = 14.000000000000000000
+      TextSettings.HorzAlign = Trailing
+      Text = #20316#32773
+      TabOrder = 0
+    end
+    object edtAuthor: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 5
+      TextSettings.Font.Size = 14.000000000000000000
+      Position.X = 136.000000000000000000
+      Position.Y = 122.000000000000000000
+      Size.Width = 281.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+      StyledSettings = [Family, Style, FontColor]
+    end
+    object btnReadFile: TButton
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 440.000000000000000000
+      Position.Y = 82.000000000000000000
+      Size.Width = 97.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 10
+      Text = '1. '#35712#27284
+      TextSettings.Font.Size = 14.000000000000000000
+      OnClick = btnReadFileClick
+    end
+    object btnEditBook: TSpeedButton
+      Cursor = crHandPoint
+      Hint = #38283#21855#26360#26412#27284#26696
+      Images = ImageList1
+      ImageIndex = 2
+      Position.X = 576.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 25.000000000000000000
+      Size.Height = 35.000000000000000000
+      Size.PlatformDefault = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = btnEditBookClick
+    end
+    object btnGenFiles: TButton
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 544.000000000000000000
+      Position.Y = 82.000000000000000000
+      Size.Width = 97.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 9
+      Text = '2.'#29986#29983#35373#23450#27284
+      TextSettings.Font.Size = 14.000000000000000000
+      OnClick = btnGenFilesClick
+    end
+    object btnGenMobi: TButton
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 440.000000000000000000
+      Position.Y = 120.000000000000000000
+      Size.Width = 97.000000000000000000
+      Size.Height = 33.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 8
+      Text = '3.'#29986#29983'MOBI'#27284
+      TextSettings.Font.Size = 14.000000000000000000
+      OnClick = btnGenMobiClick
+    end
+    object txtMsg: TLabel
+      StyledSettings = [Family, Size, Style]
+      Position.X = 544.000000000000000000
+      Position.Y = 104.000000000000000000
+      TextSettings.FontColor = claCrimson
+      Text = #35712#27284#20013'......'
+      Visible = False
+      TabOrder = 11
+    end
+    object Button1: TButton
+      Position.X = 624.000000000000000000
+      Position.Y = 136.000000000000000000
+      TabOrder = 12
+      Text = 'Button1'
+      Visible = False
+      OnClick = Button1Click
+    end
+    object txtCount: TLabel
+      StyledSettings = [Family, Size, Style]
+      Position.X = 440.000000000000000000
+      Position.Y = 129.000000000000000000
+      Size.Width = 265.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.FontColor = claRed
+      Visible = False
+      TabOrder = 13
+    end
+    object chkMarkdown: TCheckBox
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 440.000000000000000000
+      Position.Y = 56.000000000000000000
+      Size.Width = 249.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 14
+      Text = #35712#27284#26178#36681#25563#28858'Markdown'#26684#24335
+      TextSettings.Font.Size = 14.000000000000000000
+    end
+    object btnEditMarkdown: TSpeedButton
+      Cursor = crHandPoint
+      Hint = #38283#21855'Markdown'#27284
+      Images = ImageList1
+      ImageIndex = 2
+      Position.X = 648.000000000000000000
+      Position.Y = 49.000000000000000000
+      Size.Width = 25.000000000000000000
+      Size.Height = 35.000000000000000000
+      Size.PlatformDefault = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = btnEditMarkdownClick
+    end
+    object btnSettings: TSpeedButton
+      Cursor = crHandPoint
+      Hint = #38283#21855'm2m.ini'#35373#23450#27284
+      Images = ImageList1
+      ImageIndex = 4
+      Position.X = 624.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 25.000000000000000000
+      Size.Height = 35.000000000000000000
+      Size.PlatformDefault = False
+      ParentShowHint = False
+      ShowHint = True
+      OnClick = btnSettingsClick
+    end
+  end
+  object Panel2: TPanel
+    Align = Client
+    Size.Width = 709.000000000000000000
+    Size.Height = 295.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    object Label4: TLabel
+      StyledSettings = [Style, FontColor]
+      Position.X = 16.000000000000000000
+      Position.Y = 14.000000000000000000
+      TextSettings.Font.Family = 'Microsoft JhengHei'
+      TextSettings.Font.Size = 14.000000000000000000
+      Text = #31532#20108#23652#26368#22810#38917#30446#25976
+      TabOrder = 1
+    end
+    object edtCounter: TNumberBox
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      TabOrder = 4
+      Cursor = crIBeam
+      DecimalDigits = 0
+      Min = 10.000000000000000000
+      Value = 20.000000000000000000
+      Position.X = 136.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 40.000000000000000000
+      Size.Height = 32.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object Label5: TLabel
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 190.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 73.000000000000000000
+      Size.Height = 18.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Size = 14.000000000000000000
+      Text = #22739#32302#26041#24335
+      TabOrder = 5
+    end
+    object lstCompress: TListBox
+      Position.X = 252.000000000000000000
+      Position.Y = 8.000000000000000000
+      Size.Width = 200.000000000000000000
+      Size.Height = 65.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      DisableFocusEffect = True
+      ItemIndex = 1
+      DefaultItemStyles.ItemStyle = ''
+      DefaultItemStyles.GroupHeaderStyle = ''
+      DefaultItemStyles.GroupFooterStyle = ''
+      Viewport.Width = 196.000000000000000000
+      Viewport.Height = 61.000000000000000000
+      object ListBoxItem1: TListBoxItem
+        TabOrder = 0
+        Text = '-c0 '#19981#22739#32302
+      end
+      object lstCompressOption: TListBoxItem
+        IsSelected = True
+        Position.Y = 19.000000000000000000
+        TabOrder = 1
+        Text = '-c1 '#27161#28310#25991#20214#22739#32302
+      end
+      object ListBoxItem3: TListBoxItem
+        Position.Y = 38.000000000000000000
+        TabOrder = 2
+        Text = '-c2 '#26368#24375#22739#32302
+      end
+    end
+    object chkVerbose: TCheckBox
+      Position.X = 136.000000000000000000
+      Position.Y = 48.000000000000000000
+      Size.Width = 89.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 7
+      Text = #35443#32048#36039#35338
+    end
+    object MemoStatus: TMemo
+      Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+      DataDetectorTypes = []
+      Position.X = 8.000000000000000000
+      Position.Y = 80.000000000000000000
+      Size.Width = 505.000000000000000000
+      Size.Height = 209.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 8
+      Viewport.Width = 501.000000000000000000
+      Viewport.Height = 205.000000000000000000
+    end
+    object GroupBox1: TGroupBox
+      StyledSettings = [Family, Size, Style, Other]
+      Position.X = 528.000000000000000000
+      Position.Y = 16.000000000000000000
+      Size.Width = 169.000000000000000000
+      Size.Height = 273.000000000000000000
+      Size.PlatformDefault = False
+      Text = #27298#35222#35373#23450#27284
+      TextSettings.FontColor = claBlue
+      TabOrder = 9
+      object btnBookHTML: TButton
+        Position.X = 16.000000000000000000
+        Position.Y = 24.000000000000000000
+        Size.Width = 137.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 5
+        Text = 'mybook.html'
+        OnClick = btnBookHTMLClick
+      end
+      object btnBookOPF: TButton
+        Position.X = 16.000000000000000000
+        Position.Y = 64.000000000000000000
+        Size.Width = 137.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 4
+        Text = 'mybook.opf'
+        OnClick = btnBookOPFClick
+      end
+      object btnTOCHTML: TButton
+        Position.X = 16.000000000000000000
+        Position.Y = 104.000000000000000000
+        Size.Width = 137.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 3
+        Text = 'toc.html'
+        OnClick = btnTOCHTMLClick
+      end
+      object btnTOCNCX: TButton
+        Position.X = 16.000000000000000000
+        Position.Y = 144.000000000000000000
+        Size.Width = 137.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+        Text = 'toc.ncx'
+        OnClick = btnTOCNCXClick
+      end
+      object btnBookBat: TButton
+        Position.X = 16.000000000000000000
+        Position.Y = 184.000000000000000000
+        Size.Width = 137.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        Text = 'mybook.bat'
+        OnClick = btnBookBatClick
+      end
+      object btnPreview: TButton
+        Position.X = 16.000000000000000000
+        Position.Y = 224.000000000000000000
+        Size.Width = 137.000000000000000000
+        Size.Height = 33.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        Text = #38928#35261'MOBI'#27284
+        OnClick = btnPreviewClick
+      end
+    end
+    object Image1: TImage
+      MultiResBitmap.Height = 1252
+      MultiResBitmap.Width = 1875
+      MultiResBitmap.TransparentColor = -16777211
+      MultiResBitmap = <
+        item
+        end>
+      Position.X = 456.000000000000000000
+      Position.Y = 24.000000000000000000
+      Size.Width = 81.000000000000000000
+      Size.Height = 49.000000000000000000
+      Size.PlatformDefault = False
+      Visible = False
+    end
+  end
+  object Panel3: TPanel
+    Align = MostBottom
+    Position.Y = 456.000000000000000000
+    Size.Width = 709.000000000000000000
+    Size.Height = 23.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 24
+    Top = 201
+  end
+  object ImageList1: TImageList
+    Source = <
+      item
+        MultiResBitmap = <
+          item
+          end>
+        Name = 'Item 0'
+      end
+      item
+        MultiResBitmap.Width = 32
+        MultiResBitmap.LoadSize = 0
+        MultiResBitmap.TransparentColor = 536870912
+        MultiResBitmap = <
+          item
+            Width = 32
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D494844520000002000000010080600000077007D
+              59000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              017B49444154484B8594018E8530084475B3F7564FEEE7015369ADFA92BF055A
+              99A14D765D7A4EFBA946FCC4F89DB36DDB791C87EF117B7182CE406D74167596
+              D388ACB0AED36F3B4104C8F77DCFCA856A32F1E759E0AD53F3D13DA4B1EE8C1A
+              2250CD98E10E6AE39911FAB3C90D38C4CA27F50E3566CD331E3FD5BB6B2CF811
+              FCE6D9460E51B91568AC67D0CD48747C96F1E34EEDC9844833AD87A614A30951
+              CDB0D13E8A327F5617F6CCD26A4237404E6C029E0342B5B96AD5844CAABE66A7
+              263EB9E2864C886A4082E3155764A237190935A2D7F53A17903305BFCC1D4F26
+              687A41FE9FB18139F663BD6EE25A91A06EBDB236C7CEF8F566DA189F03CAFF81
+              4B3CC418DBA761D3D797D7B98108575C9F46A6AC5734358A814B9C954911AC13
+              B386916F2788C980261E4D4133103D439C35C4A8DD2903346A539018D8F99367
+              2166658F9AE7EC1318356E488CEF89B34F8B6D52CFC7C984C4D823D633D4F809
+              BE7B8533F5608D692EA883622F1A9C8971E6B40F3F98F6F89A2E58961F82A7D5
+              ADE30911060000000049454E44AE426082}
+            FileName = 'D:\Delphi\XE10.2.3\Images\Buttons\EDIT.BMP'
+          end>
+        Name = 'EDIT'
+      end
+      item
+        MultiResBitmap.Width = 32
+        MultiResBitmap.LoadSize = 0
+        MultiResBitmap.TransparentColor = 536870912
+        MultiResBitmap = <
+          item
+            Width = 32
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D494844520000002000000010080600000077007D
+              59000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              012C49444154484BAD930B1283200C05B517174FE6D12C9B8F46941467BA336D
+              6808BC9768E7A9B22CCBBEAE2BCB839A9B6A4EF647E00E5B0A6FCEC2AE9C919C
+              6EFDC6C5EDB0D01AEA81CB51A1C78E4685B28998E73C52A7E557303042CFE847
+              830F228B39F30FA8C1881407CC808A94B27051FDC885124B29B63F069DC68FA5
+              53F085398A8F759B2352DC8288D5A52F63AC8B1C13A063DDE6EB1C3D67988471
+              BBC04180170D1146EE9073133ACD3B6850C0595967913A39657867BD0E1DD9AC
+              B8198709549FFA2376DE8F57E8B0D75944E7A14A18916425DE687915B3DA11A4
+              90CE30E2226DA723A08F090ECA7ADBB6345227272BF111B8B824125A9392D4F8
+              4E1CDC4014978D0EAD38C8A599684F1CB8F0AD3875ED834E0F061E5F90A7AE9E
+              B8FC5D2DF737B8D89629AA3D4D5F8359F5830A7426E10000000049454E44AE42
+              6082}
+            FileName = 'D:\Delphi\XE10.2.3\Images\Buttons\FLDR2OPN.BMP'
+          end>
+        Name = 'FLDR2OPN'
+      end
+      item
+        MultiResBitmap.Width = 32
+        MultiResBitmap.LoadSize = 0
+        MultiResBitmap.TransparentColor = 536870912
+        MultiResBitmap = <
+          item
+            Width = 32
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D494844520000002000000010080600000077007D
+              59000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              017E49444154484B7D94091283200C4569A707D393A127D39B595E9A4F435CDE
+              4C263B01454BE3A8B51EDBB61DD8126288FBB7788DA19E1C73F3963E9C626C6F
+              8A1B909CA00634C89C867CB4043FF36E09374B99A6A9CCF3ECDE0FF2B126B3AE
+              EBCB4D1BBE2C4B7935E4932726DF8CC0BB15B859CABEEFA761E4634DC24EA681
+              C0C03888BC369021878E8FA84B8A19F25D83D91AA81EE5892B2F94036C76AE66
+              D4804E4E8E933593058627A23ECF0F8F5927D76B612075684B803B5D1EFCA116
+              DB2FAFC525D9BF3AB5E2402C16C8EE0B8598303F7E39166C60470D318FBECA45
+              6C51974CCF5D0D47E34B1403EC9C4393FB90C768F00EFB6DBEA235B9F583CFB6
+              D16F39EF97C5CD09E8FDE7AF81DAE13FE0BBEABBCB70F9E205E4B3CD974F170E
+              F023E494F7D07FA824F877F447894D40BEC7B4E60936494E9BB53ADE67FCFD22
+              770BE49A58A7C515D3904CEE83BCE065A3136B729F81FD345CBAF7C5D34B0719
+              4875609A818AA125F819C563CFB0B004DF92CFF41A7A005B8BCBCF285E6B3DBE
+              A95A667E9CEDB45C0000000049454E44AE426082}
+            FileName = 'D:\Delphi\XE10.2.3\Images\Buttons\GEARS.BMP'
+          end>
+        Name = 'GEARS'
+      end
+      item
+        MultiResBitmap.LoadSize = 0
+        MultiResBitmap = <
+          item
+            Width = 16
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+              61000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              02B749444154384F75534148DA61147FE972AB39C3C829CDAD5021040F923A1A
+              8D20DA0E450747C7C50E316276F192670FA3C1B04B04CADC8808831D56060B82
+              5874E9D0C19187503B48811266B61499FECD59FBBD2F1B51EC073FFF9FEFFDDE
+              F7BDF7BEF735D07FE0F3F9EE2B148AD7BC3E3B3B5BF4783CBF85E3066E6D303D
+              3DDD562C16259D4E57ECE9E911B6EDED6DCA64320F807B9393933961AC435EFF
+              D2ECECECB3C1C1C10F2D2D2DA1F3F37395CD667B0A1036A24AA542C7C7C7AAD6
+              D6D66F030303C6A1A1A1CCDADA5ABA1E7A099CBC88932F18894442F00AD7FFB3
+              86B5F5B04BA0DE8773737342701D4747478237313F3F7F313535A5E5D83BFC93
+              CD66CB2727270BBBBBBB6F2C160BD74B2B2B2B148944B6D86FB7DB9F3B9D4E51
+              0E34846C166AB55A897D0D5EAF57C90D339BCD84FAC96AB5522010A06030F836
+              1A8DFE60116C2FC6C7C7BFB85C2E828D0A8502C5E371D158F9F0F0B0BBAFAFEF
+              A5C3E120A55249A9548AD6D7D7BF86C3E1F788FD0516208C757575998C46A345
+              AFD793C964225C31A5D3E9BC4C92A446A443D56A95B0265EAB542A4E4F022FEA
+              94D8C63ED6B0B6BE6EE439D0FAFDFE4C676727A9D56AE25242A1100BEC6EB7FB
+              27FC3433336393CBE591D1D15191FAE9E9291D1C1CD0C4C4848E3750808F519F
+              0F8257EDEDED542A9568737393300F41F86A3299CCD5DFDF4FCDCDCD747878C8
+              0784D1270F7C291EA4DAD8D8581386E6736F6F2FEDEFEF0B6177773769B55A5B
+              474707DAE310A9E3B608BDE0269A351ACDC79D9D9DBC0C1B10662083867CCFE7
+              F36430182897CB8954CBE5B298425EB38D7DAC612DC770ECBF51C68E12EEF711
+              767FB2BCBCBC81930CC840749B83313C1B785486D5D5D5AD64321988C562098E
+              BBFE98EE826DA01E94506394D365ECEDED117A64C5B2094C81FCA02AE0ADD7C8
+              FF993CA186919191776C5C5A5AFA844F12FC035E5D2D40F4177C87904F30322E
+              4E0000000049454E44AE426082}
+            FileName = 'Z:\gear.png'
+          end>
+        Name = 'gear'
+      end
+      item
+        MultiResBitmap.LoadSize = 0
+        MultiResBitmap = <
+          item
+            Width = 16
+            Height = 16
+            PNG = {
+              89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+              61000000017352474200AECE1CE90000000467414D410000B18F0BFC61050000
+              021049444154384F9552CB6A5A5114DDD707144189F8A00A228A08229A442771
+              148B9366D47C42063EDAAFE8ED67F818F413FA03523372A4499C080EB4A268F1
+              8117059F88DDEBF45E89492874C1BEF79CB3F6D97B9FB537FD0BB95C2E0953B7
+              6F4252FFAF904EA72F6C36DB03D6D3E9F4B2542A3D0AE20574EA5F2093C9C85A
+              469D4EF7C9ED76130C6B9C81830FD61A8E1564B3D9AF3E9F4F5E2C16341C0E67
+              C160D01A0A8504D76C36A9D56ACD5C2E97D56C3653A7D3910B85C2377006E1C1
+              381C0E95F97C4E89448276BB9DD56834AA0C51381C2604C459B55A15BE2A75AA
+              0157314BA5526770ECF57AC2008FC7238C0353B95C5638BB55100C3D3E102C1E
+              8F7F66A78F76BB5D5CE4B21F57ABD5CD7ABDCE4F26932B83C1F0DE62B120C8BB
+              402020C56231A55EAFFF9658946B7E5705172118B2D76A35E2E71C954702BEFC
+              C049441583C1803828B15E49D1057E13EDF77B41C2B07F099C693C7C351FA101
+              B7E79C0F6E9D4EA7ECF57A693C1E53BBDD7E62EA0E3CE3BBDFEF3F77381CD4ED
+              7669341AC99224FDC8E7F34FAF448C46A3677ABD5E940803F03C1832371A8D13
+              118F0130242693E927CF82704490E7D0CE780668B95C7EE0ECA295C749E4275C
+              43402E1D1D50FAFD3E710784618D3370F081AF7AED6F1B0156FE1E03B3DD6EE5
+              62B1F8056B764C722B4951144CDE4D2412A96C369B5FDA1402271A3C0784E56C
+              A28DACFC050413C4FF00330253B76F80E80F7FA01C099834670D000000004945
+              4E44AE426082}
+            FileName = 'Z:\gear.png'
+          end>
+        Name = 'Item 1'
+      end>
+    Destination = <
+      item
+        Layers = <
+          item
+            Name = 'FLDR2OPN'
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'FLDR2OPN'
+            SourceRect.Left = 16.000000000000000000
+            SourceRect.Right = 32.000000000000000000
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'EDIT'
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'EDIT'
+            SourceRect.Left = 16.000000000000000000
+            SourceRect.Right = 32.000000000000000000
+          end>
+      end
+      item
+        Layers = <
+          item
+            Name = 'Item 1'
+          end>
+      end>
+    Left = 80
+    Top = 201
+  end
+end

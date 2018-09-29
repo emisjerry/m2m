@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899-12-30 00:00:00.000.311,=D:\Delphi\projects\regex2.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.318,D:\Delphi\projects\regex2.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.980,=C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.600,=C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.234,=C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.905,=Z:\m2m\template.opf</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.211,C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\M2MUnit1.fmx=C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\Unit1.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.533,D:\Delphi\projects\m2m.dproj=D:\Delphi\projects\m2m.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.176,=D:\Delphi\projects\m2m\RegularExpressionsCore.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.498,D:\Delphi\projects\m2m.dproj=D:\Delphi\projects\m2m\m2m.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.967,=C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.708,D:\Delphi\projects\RegularExpressionsCore.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.154,=D:\Delphi\projects\m2m\RegularExpressions.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.657,=D:\Delphi\projects\RegularExpressionsCore.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.997,=D:\Delphi\projects\RegularExpressions.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.409,D:\Delphi\projects\RegularExpressions.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.932,C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\M2M.dproj=C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\M2M.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.711,D:\Delphi\projects\m2mUnit1.fmx=D:\Delphi\projects\m2m\m2mUnit1.fmx</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.916,C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\M2M.dproj=C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.711,D:\Delphi\projects\m2mUnit1.pas=D:\Delphi\projects\m2m\m2mUnit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.211,C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\M2MUnit1.pas=C:\Users\Jerry\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+  </Transactions>
+	<ActiveMobileDevice>
+		<NoProfile iOSSimulator="iPhone5"/>
+		<Posx iOSSimulator="iPhone5"/>
+	</ActiveMobileDevice>
+	<BT_BuildType>Debug</BT_BuildType>
+</BorlandProject>
