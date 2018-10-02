@@ -58,6 +58,9 @@ type
     chkMarkdown: TCheckBox;
     btnEditMarkdown: TSpeedButton;
     btnSettings: TSpeedButton;
+    chkLeadingSpaces: TCheckBox;
+    chkVertical: TCheckBox;
+    txtLink: TLabel;
     procedure btnOpenFileClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnReadFileClick(Sender: TObject);
@@ -79,10 +82,13 @@ type
     procedure btnGenFilesClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     function markdown(sText: String; lstExpr: TStringList): String;
+    function symbolReplace(sText: String; lstSymbol: TStringList): String;
     procedure Timer1Timer(Sender: TObject);
     procedure btnEditBookClick(Sender: TObject);
     procedure btnEditMarkdownClick(Sender: TObject);
     procedure btnSettingsClick(Sender: TObject);
+    procedure chkMarkdownChange(Sender: TObject);
+    procedure txtLinkClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -91,7 +97,7 @@ type
 
 const
   _DEBUG_: Boolean = false;
-  _VERSION_: String = 'v0.02';
+  _VERSION_: String = 'v0.03';
 
 var
   Form1: TForm1;
@@ -246,7 +252,11 @@ begin
   _lstText.LoadFromFile(sAppDir_ + 'template.toc.html', TEncoding.UTF8);
   _sText := _lstText.Text;
   _sText := StringReplace(_sText, '%TITLE%', '目錄', [rfReplaceAll]);
-  _sText := StringReplace(_sText, '%CSS%', 'style.css', [rfReplaceAll]);
+  if chkVertical.IsChecked then begin
+    _sText := StringReplace(_sText, '%CSS%', 'style_vertical.css', [rfReplaceAll]);
+  end else begin
+    _sText := StringReplace(_sText, '%CSS%', 'style.css', [rfReplaceAll]);
+  end;
   _sText := StringReplace(_sText, '%TOC_HTML%', _sTOC, [rfReplaceAll]);
   _lstText.Text := _sText;
   _lstText.SaveToFile(sAppdir_ + 'toc.html', TEncoding.UTF8);
@@ -366,7 +376,7 @@ var
   today : TDateTime;
   re : TRegEx;
   _hasHashMark: Boolean;
-  _lstExpr: TStringList;
+  _lstExpr, _lstSymbol: TStringList;
 begin
   sAuthor_ := '';
   sTitle_ := '';
@@ -415,7 +425,7 @@ begin
   //Memo1.Lines.Text := lst.Text;
   txtMsg.Visible := false;
   if (sTitle_ = '') then begin
-    for i := 0 to 20 do begin
+    for i := 0 to 10 do begin
       _sLine := lstContent_.Strings[i];  //.Lines.Strings[i];
       _iPos := Pos('書名：', _sLine);
       if (_iPos > 0) then begin
@@ -426,7 +436,7 @@ begin
   end;
 
   if (sAuthor_ = '') then begin
-    for i := 0 to 20 do begin
+    for i := 0 to 10 do begin
       _sLine := lstContent_.Strings[i];
       _iPos := Pos('作者：', _sLine);
       if (_iPos > 0) then begin
@@ -434,26 +444,36 @@ begin
         break;
       end;
     end;
-    if sAuthor_ = '' then begin
-      //sAuthor_ := '(未知)';
-      sAuthor_ := lstContent_.Strings[1];
-      sAuthor_ := StringReplace(sAuthor_, ':', '：', [rfReplaceAll]);
-    end;
-    edtAuthor.Text := sAuthor_;
   end;
+  if sAuthor_ = '' then begin
+    sAuthor_ := lstContent_.Strings[1];
+    if sAuthor_ = '' then sAuthor_ := '(未知)';
+
+    sAuthor_ := StringReplace(sAuthor_, ':', '：', [rfReplaceAll]);
+    sAuthor_ := StringReplace(sAuthor_, ' ', '_', [rfReplaceAll]);
+  end;
+  edtAuthor.Text := sAuthor_;
+
   if sTitle_ = '' then begin
     sTitle_ := lstContent_.Strings[0];
     sTitle_ := StringReplace(sTitle_, ':', '：', [rfReplaceAll]);
+    sTitle_ := StringReplace(sTitle_, ' ', '_', [rfReplaceAll]);
   end;
   edtTitle.Text := sTitle_;
 
   _lstExpr := TStringList.Create;
+  _lstSymbol := TStringList.Create;
   _sDatetime := DateTimeToStr(now);
   if chkMarkdown.isChecked then begin
     txtCount.Visible := true;
     txtCount.Text := '轉換Markdown格式中，請稍候...';
     memoStatus.Lines.Add('  開始轉換成Markdown格式... ' + _sDatetime);
     oIniFile_.ReadSectionValues('RegularExpressions', _lstExpr);
+    if chkVertical.IsChecked then begin
+      oIniFile_.ReadSectionValues('SymbolReplace_Vertical', _lstSymbol);
+    end else begin
+      oIniFile_.ReadSectionValues('SymbolReplace_Horizental', _lstSymbol);
+    end;
   end;
   btnReadFile.Enabled := false;
 
@@ -461,14 +481,25 @@ begin
   //txtCount.BeginUpdate;
   if chkMarkdown.IsChecked then begin
     for i := 0 to lstContent_.Count-1 do begin
-      _sLine := lstContent_.Strings[i];  //.Lines.Strings[i];
+      _sLine := lstContent_.Strings[i];
       if Copy(_sLine,1,1) = '#' then begin
         _hasHashMark := true;
         continue;
+      end else if Tregex.IsMatch(_sLine, '^(\s)*') then begin
+        _sLine := Trim(_sLine);
+        lstContent_.Strings[i] := _sLine;
       end;
 
       if Length(_sLine) <= 2 then continue;
-      
+      if i=107 then begin
+        _iPos := 1;
+      end;
+
+      _sReplacedLine := symbolReplace(_sLine, _lstSymbol);  // 標點符號轉換
+      if _sReplacedLine <> _sLine then begin
+        lstContent_.Strings[i] := _sReplacedLine;
+      end;
+
       _sReplacedLine := markdown(_sLine, _lstExpr);
       if _sReplacedLine <> _sLine then begin
         _hasHashMark := true;
@@ -486,6 +517,7 @@ begin
 
   //txtCount.EndUpdate;
   _lstExpr.Destroy;
+  _lstSymbol.Destroy;
   if chkMarkdown.isChecked then begin
     _sDatetime := DateTimeToStr(now);
     memoStatus.Lines.Add('  結束轉換成Markdown格式... ' + _sDatetime);
@@ -567,11 +599,9 @@ end;
 function TForm1.markdown(sText: String; lstExpr: TStringList): String;
 var
   i, _iPos: Integer;
-  re: TRegEx;
   _sExpr, _sPattern, _sReplaced: String;
 begin
   // group使用大括號, 被替代token用$1, $2, ...
-  re.Create('^第(.*)章 (.*)');
   for i := 0 to lstExpr.Count-1 do begin
     _sExpr := lstExpr.Strings[i];
     _iPos := Pos('=', _sExpr);
@@ -582,21 +612,49 @@ begin
     if Tregex.IsMatch(sText, _sPattern) then begin
       sText := Tregex.Replace(sText, _sPattern, _sReplaced);
       if Pos(',', sText) > 0 then begin
-        sText := StringReplace(sText, ',', '●', [rfReplaceAll]);
+        sText := StringReplace(sText, ',', '·', [rfReplaceAll]);
       end;
       if Pos('，', sText) > 0 then begin
-        sText := StringReplace(sText, '，', '●', [rfReplaceAll]);
+        sText := StringReplace(sText, '，', '·', [rfReplaceAll]);
       end;
     end;
   end;
   Result := sText;
 end;
 
+function TForm1.symbolReplace(sText: String; lstSymbol: TStringList): String;
+var
+  i, _iPos: Integer;
+  _sExpr, _sPattern, _sReplaced: String;
+begin
+  // group使用大括號, 被替代token用$1, $2, ...
+  for i := 0 to lstSymbol.Count-1 do begin
+    _sExpr := lstSymbol.Strings[i];
+    _iPos := Pos('=', _sExpr);
+    _sPattern := Copy(_sExpr, 1, _iPos-1);
+    _sReplaced := Copy(_sExpr, _iPos+1, 99);
+    if _sReplaced = '' then _sReplaced := ' ';
+
+    if Tregex.IsMatch(sText, _sPattern) then begin
+      sText := Tregex.Replace(sText, _sPattern, _sReplaced);
+    end;
+  end;
+  Result := sText;
+end;
+
+
 procedure TForm1.Button1Click(Sender: TObject);
 var
   opt: TRegExOptions;
 begin
 //  markdown(lstContent_.Text);
+end;
+
+procedure TForm1.chkMarkdownChange(Sender: TObject);
+begin
+  if chkMarkdown.IsChecked then begin
+    chkLeadingSpaces.isChecked := true;
+  end;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -661,6 +719,7 @@ end;
 
 procedure TForm1.btnOpenFileClick(Sender: TObject);
 begin
+  OpenDialog1.InitialDir := oIniFile_.ReadString('SETTINGS', 'TEXT_FOLDER', sAppDir_);
   if OpenDialog1.Execute then begin
     sFilename_ := OpenDialog1.Filename;
     //Memo1.Lines.Clear;
@@ -692,7 +751,11 @@ begin
   _lstText.Add('  <head>');
   _lstText.Add('  <title>' + sTitle_ + '</title>');
   _lstText.Add('  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />');
-  _lstText.Add('  <link rel="stylesheet" href="style.css"  type="text/css" />');
+  if chkVertical.IsChecked then begin
+    _lstText.Add('  <link rel="stylesheet" href="style_vertical.css"  type="text/css" />');
+  end else begin
+    _lstText.Add('  <link rel="stylesheet" href="style.css"  type="text/css" />');
+  end;
   _lstText.Add('</head>');
   _lstText.Add('<body>');
 
@@ -718,7 +781,7 @@ begin
     end;
 
     if (_iHeaderCount > 0) then begin
-      if (_sLine = lstContent_.Strings[i-1]) then begin  // 標題重覆
+      if (i>1) and (_sLine = lstContent_.Strings[i-1]) then begin  // 標題重覆
         continue;
       end;
 
@@ -758,6 +821,10 @@ begin
         IntToStr(_iHeaderCount+1) + '>' + _sHeader +
         '</h' + IntToStr(_iHeaderCount+1) + '></a>';
     end else begin
+      if (chkLeadingSpaces.IsChecked) then begin
+        _sLine := '　　' + _sLine;
+      end;
+
       _sLine := '<p>' + _sLine + '</p>';
     end;
     _lstText.Add(_sLine);
@@ -839,6 +906,18 @@ begin
   _sTOC := StringReplace(_sTOC, '  <ul>'#13#10'  </ul>', '', [rfReplaceAll]);
 
   Result := _sTOC;
+end;
+
+procedure TForm1.txtLinkClick(Sender: TObject);
+begin
+{$IFDEF MSWINDOWS}
+  ShellExecute(0, PChar('open'), PChar(txtLink.Text+'/5451'), PChar(''), nil, SW_SHOW);
+{$ENDIF MSWINDOWS}
+
+{$IFDEF MACOS}
+  _system(PAnsiChar('open ' + '"' + AnsiString(txtLink.Text+'/5451') + '"'));
+{$ENDIF MACOS}
+
 end;
 
 // Create .ncx content
