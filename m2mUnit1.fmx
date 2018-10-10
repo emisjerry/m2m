@@ -2,9 +2,9 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'M2M Markdown'#36681#25563#33267'MOBI'#24037#20855
-  ClientHeight = 479
+  ClientHeight = 592
   ClientWidth = 709
-  Position = ScreenCenter
+  Position = DesktopCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -14,7 +14,7 @@ object Form1: TForm1
   object Panel1: TPanel
     Align = MostTop
     Size.Width = 709.000000000000000000
-    Size.Height = 161.000000000000000000
+    Size.Height = 225.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
     ParentShowHint = False
@@ -57,7 +57,7 @@ object Form1: TForm1
       Anchors = [akTop]
       StyledSettings = [Style, FontColor]
       Position.X = 17.000000000000000000
-      Position.Y = 88.000000000000000000
+      Position.Y = 144.000000000000000000
       Size.Width = 97.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -72,7 +72,7 @@ object Form1: TForm1
       TabOrder = 6
       TextSettings.Font.Size = 14.000000000000000000
       Position.X = 136.000000000000000000
-      Position.Y = 82.000000000000000000
+      Position.Y = 138.000000000000000000
       Size.Width = 281.000000000000000000
       Size.Height = 32.000000000000000000
       Size.PlatformDefault = False
@@ -82,7 +82,7 @@ object Form1: TForm1
       Anchors = [akTop]
       StyledSettings = [Style, FontColor]
       Position.X = 17.000000000000000000
-      Position.Y = 128.000000000000000000
+      Position.Y = 184.000000000000000000
       Size.Width = 97.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -97,7 +97,7 @@ object Form1: TForm1
       TabOrder = 5
       TextSettings.Font.Size = 14.000000000000000000
       Position.X = 136.000000000000000000
-      Position.Y = 122.000000000000000000
+      Position.Y = 178.000000000000000000
       Size.Width = 281.000000000000000000
       Size.Height = 32.000000000000000000
       Size.PlatformDefault = False
@@ -106,7 +106,7 @@ object Form1: TForm1
     object btnReadFile: TButton
       StyledSettings = [Family, Style, FontColor]
       Position.X = 440.000000000000000000
-      Position.Y = 82.000000000000000000
+      Position.Y = 138.000000000000000000
       Size.Width = 97.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
@@ -132,7 +132,7 @@ object Form1: TForm1
     object btnGenFiles: TButton
       StyledSettings = [Family, Style, FontColor]
       Position.X = 544.000000000000000000
-      Position.Y = 82.000000000000000000
+      Position.Y = 138.000000000000000000
       Size.Width = 97.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
@@ -144,7 +144,7 @@ object Form1: TForm1
     object btnGenMobi: TButton
       StyledSettings = [Family, Style, FontColor]
       Position.X = 440.000000000000000000
-      Position.Y = 120.000000000000000000
+      Position.Y = 176.000000000000000000
       Size.Width = 97.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
@@ -188,7 +188,7 @@ object Form1: TForm1
       Size.Width = 217.000000000000000000
       Size.Height = 19.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 16
+      TabOrder = 17
       Text = #35712#27284#26178#36681#25563#28858'Markdown'#26684#24335
       TextSettings.Font.Size = 14.000000000000000000
       OnChange = chkMarkdownChange
@@ -201,7 +201,7 @@ object Form1: TForm1
       Position.X = 232.000000000000000000
       Position.Y = 49.000000000000000000
       Size.Width = 25.000000000000000000
-      Size.Height = 35.000000000000000000
+      Size.Height = 32.000000000000000000
       Size.PlatformDefault = False
       ParentShowHint = False
       ShowHint = True
@@ -223,12 +223,12 @@ object Form1: TForm1
     end
     object chkLeadingSpaces: TCheckBox
       StyledSettings = [Family, Style, FontColor]
-      Position.X = 272.000000000000000000
+      Position.X = 268.000000000000000000
       Position.Y = 56.000000000000000000
       Size.Width = 209.000000000000000000
       Size.Height = 19.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 15
+      TabOrder = 16
       Text = #27573#33853#38283#38957#25554#20837#20841#20491#20840#24418#31354#30333
       TextSettings.Font.Size = 14.000000000000000000
     end
@@ -239,15 +239,26 @@ object Form1: TForm1
       Size.Width = 209.000000000000000000
       Size.Height = 19.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 14
+      TabOrder = 15
       Text = #25991#23383#30452#25490
+      TextSettings.Font.Size = 14.000000000000000000
+    end
+    object chkRemoveNewline: TCheckBox
+      StyledSettings = [Family, Style, FontColor]
+      Position.X = 268.000000000000000000
+      Position.Y = 88.000000000000000000
+      Size.Width = 209.000000000000000000
+      Size.Height = 19.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 14
+      Text = #21034#38500#27573#33853#38291#30340#31354#34892
       TextSettings.Font.Size = 14.000000000000000000
     end
   end
   object Panel2: TPanel
     Align = Client
     Size.Width = 709.000000000000000000
-    Size.Height = 295.000000000000000000
+    Size.Height = 344.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
     object Label4: TLabel
@@ -422,7 +433,7 @@ object Form1: TForm1
   end
   object Panel3: TPanel
     Align = MostBottom
-    Position.Y = 456.000000000000000000
+    Position.Y = 569.000000000000000000
     Size.Width = 709.000000000000000000
     Size.Height = 23.000000000000000000
     Size.PlatformDefault = False

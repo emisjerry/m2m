@@ -10,6 +10,15 @@
         <DeviceId Condition="'$(Platform)'=='iOSSimulator'">iPhone5</DeviceId>
     </PropertyGroup>
     <ItemGroup Condition="'$(Platform)'=='Win64'">
+        <DeployFile Include="Z:\kindle150x150.jpg" Condition="'$(Config)'=='Release'">
+            <RemoteDir>m2m\Assets\</RemoteDir>
+            <RemoteName>Logo44x44.png</RemoteName>
+            <DeployClass>UWP_DelphiLogo44</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Win64\Debug\m2m.exe" Condition="'$(Config)'=='Debug'">
             <RemoteDir>m2m\</RemoteDir>
             <RemoteName>m2m.exe</RemoteName>
@@ -20,10 +29,37 @@
             <Overwrite>True</Overwrite>
             <Required>True</Required>
         </DeployFile>
+        <DeployFile Include="Z:\kindle150x150.jpg" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>m2m\Assets\</RemoteDir>
+            <RemoteName>Logo44x44.png</RemoteName>
+            <DeployClass>UWP_DelphiLogo44</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Z:\m2m\template.opf" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>m2m\</RemoteDir>
+            <RemoteName>template.opf</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='iOSDevice64'"/>
     <ItemGroup Condition="'$(Platform)'=='iOSDevice32'"/>
     <ItemGroup Condition="'$(Platform)'=='Win32'">
+        <DeployFile Include="Z:\kindle150x150.jpg" Condition="'$(Config)'=='Release'">
+            <RemoteDir>m2m\Assets\</RemoteDir>
+            <RemoteName>Logo44x44.png</RemoteName>
+            <DeployClass>UWP_DelphiLogo44</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="Win32\Debug\M2M.exe" Condition="'$(Config)'=='Debug'">
             <RemoteDir>m2m\</RemoteDir>
             <RemoteName>M2M.exe</RemoteName>
@@ -36,6 +72,24 @@
         </DeployFile>
     </ItemGroup>
     <ItemGroup Condition="'$(Platform)'=='OSX32'">
+        <DeployFile Include="Z:\m2m\template.ncx" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>m2m.app\..\</RemoteDir>
+            <RemoteName>template.ncx</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Z:\m2m\template.opf" Condition="'$(Config)'=='Release'">
+            <RemoteDir>m2m.app\Contents\Resources\StartUp\</RemoteDir>
+            <RemoteName>template.opf</RemoteName>
+            <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="OSX32\Debug\m2m.info.plist" Condition="'$(Config)'=='Debug'">
             <RemoteDir>m2m.app\Contents\</RemoteDir>
             <RemoteName>Info.plist</RemoteName>
@@ -45,11 +99,29 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Z:\m2m\m2m.ini" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>m2m.app\..\</RemoteDir>
+            <RemoteName>m2m.ini</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="$(BDS)\bin\delphi_PROJECTICNS.icns" Condition="'$(Config)'=='Release'">
             <RemoteDir>m2m.app\Contents\Resources\</RemoteDir>
             <RemoteName>m2m.icns</RemoteName>
             <DeployClass>ProjectOSXResource</DeployClass>
             <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Z:\m2m\template.toc.html" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>m2m.app\..\</RemoteDir>
+            <RemoteName>template.toc.html</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
@@ -64,9 +136,18 @@
             <Overwrite>True</Overwrite>
         </DeployFile>
         <DeployFile Include="Z:\m2m\template.opf" Condition="'$(Config)'=='Debug'">
-            <RemoteDir>m2m.app\Contents\Resources\StartUp\</RemoteDir>
+            <RemoteDir>m2m.app\..\</RemoteDir>
             <RemoteName>template.opf</RemoteName>
             <DeployClass>ProjectFile</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="Z:\m2m\style_vertical.css" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>m2m.app\..\</RemoteDir>
+            <RemoteName>style_vertical.css</RemoteName>
+            <DeployClass>File</DeployClass>
             <Operation>0</Operation>
             <LocalCommand/>
             <RemoteCommand/>
@@ -128,10 +209,28 @@
             <RemoteCommand/>
             <Overwrite>True</Overwrite>
         </DeployFile>
+        <DeployFile Include="Z:\m2m\style.css" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>m2m.app\..\</RemoteDir>
+            <RemoteName>style.css</RemoteName>
+            <DeployClass>File</DeployClass>
+            <Operation>0</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
         <DeployFile Include="OSX32\Debug\m2m.rsm" Condition="'$(Config)'=='Debug'">
             <RemoteDir>m2m.app\Contents\MacOS\</RemoteDir>
             <RemoteName>m2m.rsm</RemoteName>
             <DeployClass>DebugSymbols</DeployClass>
+            <Operation>1</Operation>
+            <LocalCommand/>
+            <RemoteCommand/>
+            <Overwrite>True</Overwrite>
+        </DeployFile>
+        <DeployFile Include="D:\m2m\macOS\kindlegen" Condition="'$(Config)'=='Debug'">
+            <RemoteDir>m2m.app\Contents\Resources\StartUp\</RemoteDir>
+            <RemoteName>kindlegen</RemoteName>
+            <DeployClass>File</DeployClass>
             <Operation>1</Operation>
             <LocalCommand/>
             <RemoteCommand/>

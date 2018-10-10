@@ -8,7 +8,7 @@ uses
   FMX.Edit, FMX.Controls.Presentation, System.ImageList, FMX.ImgList,
   IniFiles, FMX.EditBox, FMX.NumberBox, FMX.ListBox, FMX.Layouts, FMX.ScrollBox,
   FMX.Memo, FMX.Surfaces, FMX.Consts, RegularExpressions,
-  RegularExpressionsCore,
+  RegularExpressionsCore, System.IoUtils,
 
 {$IFDEF MSWINDOWS}
 Winapi.ShellAPI, Winapi.Windows, FMX.Objects;
@@ -61,6 +61,7 @@ type
     chkLeadingSpaces: TCheckBox;
     chkVertical: TCheckBox;
     txtLink: TLabel;
+    chkRemoveNewline: TCheckBox;
     procedure btnOpenFileClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnReadFileClick(Sender: TObject);
@@ -97,18 +98,19 @@ type
 
 const
   _DEBUG_: Boolean = false;
-  _VERSION_: String = 'v0.03';
+  _VERSION_: String = 'v0.04';
 
 var
   Form1: TForm1;
   sFilename_, sAppDir_, sTitle_, sAuthor_, sUserName_: String;
   sToday_, sOutputBaseName_, sMobiFolder_, sMobiFilename_: String;
-  sMailServer_, sTextFolder_, sCompress_: String;
+  sMailServer_, sTextFolder_, sCompress_, sOS_: String;
   isVerbose_: Boolean;
   iLevel2MaxCount_: Integer;
   oIniFile_: TMemIniFile;
   oLevelList1_, oLevelList2_, oLevelList3_: TStringList;
   lstContent_: TStringList;
+
 implementation
 
 {$R *.fmx}
@@ -129,24 +131,36 @@ procedure open(sFilePath: String);
 var
   _sEditor, _sExt: String;
 begin
-{$IFDEF MSWINDOWS}
   _sExt := UpperCase(ExtractFileExt(sFilePath));
+{$IFDEF MSWINDOWS}
   if _sExt = '.MOBI' then begin
-    _sEditor := oIniFile_.ReadString('EDITOR_WIN', 'MOBI', 'C:\Program Files\kindle previewer 3\Kindle previewer 3.exe');
+    _sEditor := oIniFile_.ReadString('SETTINGS_WIN', 'MOBI', 'C:\Program Files\kindle previewer 3\Kindle previewer 3.exe');
     if not FileExists(_sEditor) then begin
       ShowMessage('.MOBI預設程式不存在，請搜尋kindle previewer後安裝');
     end;
   end else if _sExt = '.HTML' then begin
-    _sEditor := oIniFile_.ReadString('EDITOR_WIN', 'HTML', 'notepad');
+    _sEditor := oIniFile_.ReadString('SETTINGS_WIN', 'HTML', 'notepad');
   end else begin
-    _sEditor := oIniFile_.ReadString('EDITOR_WIN', 'TEXT', 'notepad');
+    _sEditor := oIniFile_.ReadString('SETTINGS_WIN', 'TEXT', 'notepad');
   end;
 
   ShellExecute(0, PChar('open'), PChar(_sEditor), PChar(sFilePath), nil, SW_SHOW);
 {$ENDIF MSWINDOWS}
 
 {$IFDEF MACOS}
-  _system(PAnsiChar('open ' + '"' + AnsiString(sFilePath) + '"'));
+  if _sExt = '.MOBI' then begin
+    _sEditor := oIniFile_.ReadString('SETTINGS_MACOS', 'MOBI', '');
+  end else if _sExt = '.HTML' then begin
+    _sEditor := oIniFile_.ReadString('SETTINGS_MACOS', 'HTML', '');
+  end else begin
+    _sEditor := oIniFile_.ReadString('SETTINGS_MACOS', 'TEXT', '');
+  end;
+  //!!! _system的引號不能放在AnsiString裡，其他引數一定要在AnsiString裡
+  if _sEditor = '' then begin
+    _system(PAnsiChar('open -e ' + '"' + AnsiString(sFilePath) + '"'));
+  end else begin
+    _system(PAnsiChar(AnsiString(_sEditor) + ' "' + AnsiString(sFilePath) + '"'));
+  end;
 {$ENDIF MACOS}
 end;
 
@@ -192,19 +206,7 @@ var
 begin
   _sMarkdownFilename := ChangeFileExt(edtMarkdown.Text, '.markdown');
   if FileExists(_sMarkdownFilename) then begin
-    _sEditor := oIniFile_.ReadString('EDITOR', 'HTML', 'notepad');
-    _sFilePath := _sMarkdownFilename;
-
-{$IFDEF MSWINDOWS}
-    ShellExecute(0, PChar('open'), PChar(_sEditor), PChar(_sFilePath), nil, SW_SHOW);
-{$ENDIF MSWINDOWS}
-
-{$IFDEF MACOS}
-    _sFilePath := _sFilePath;
-    _system(PAnsiChar('open ' + '"' + _sFilePath + '"'));
-{$ENDIF MACOS}
-  end else begin
-    ShowMessage(_sMarkdownFilename + ' 不存在。');
+    open(_sMarkdownFilename);
   end;
 end;
 
@@ -241,6 +243,14 @@ begin
   _sText := StringReplace(_sText, '%AUTHOR%', sAuthor_, [rfReplaceAll]);
   _sText := StringReplace(_sText, '%USERNAME%', sUserName_, [rfReplaceAll]);
   _sText := StringReplace(_sText, '%DATE%', sToday_, [rfReplaceAll]);
+  if chkVertical.IsChecked then begin
+    _sText := StringReplace(_sText, '%OPF_META_VERTICAL%', '<meta content="vertical-rl" name="primary-writing-mode"/>', [rfReplaceAll]);
+    _sText := StringReplace(_sText, '%OPF_NCX_VERTICAL%', 'page-progression-direction="rtl"', [rfReplaceAll]);
+  end else begin
+    _sText := StringReplace(_sText, '%OPF_META_VERTICAL%', '', [rfReplaceAll]);
+    _sText := StringReplace(_sText, '%OPF_NCX_VERTICAL%', '', [rfReplaceAll]);
+  end;
+
   _lstText.Text := _sText;
   _lstText.SaveToFile(sAppdir_ + sOutputBaseName_ + '.opf', TEncoding.UTF8);
   _lstText.Add('  寫出 ' + sAppdir_ + sOutputBaseName_ + '.opf');
@@ -282,14 +292,14 @@ begin
 
   _sOptions := sCompress_ + ' ' + _sVerbose;
   //oIniFile_.WriteString('SETTINGS', 'OPTIONS', _sOptions);
-  sMobiFolder_ := oIniFile_.ReadString('SETTINGS','MOBI_FOLDER', sAppDir_);
+  sMobiFolder_ := oIniFile_.ReadString('SETTINGS_'+sOS_,'MOBI_FOLDER', sAppDir_);
   if (Copy(sMobiFolder_, Length(sMobiFolder_), 1) <> '\') and
      (Copy(sMobiFolder_, Length(sMobiFolder_), 1) <> '/') then begin
     sMobiFolder_ := sMobiFolder_ + '\';
   end;
 
 {$IFDEF MSWINDOWS}
-  _sKindleGen := oIniFile_.ReadString('SETTINGS','KINDLEGEN', sAppDir_ + 'kindlegen.exe');
+  _sKindleGen := oIniFile_.ReadString('SETTINGS_'+sOS_,'KINDLEGEN', sAppDir_ + 'kindlegen.exe');
   _sFilePath := sAppDir_ + 'template.bat';
   _sExt := '.bat';
 
@@ -323,6 +333,7 @@ begin
 
   GroupBox1.Visible := true;
   btnPreview.Visible := false;
+  btnBookBat.Visible := false;
   btnGenMOBI.SetFocus;
 end;
 
@@ -347,13 +358,20 @@ begin
   _sVerbose := '';
   if (isVerbose_) then _sVerbose := '-verbose';
 
-  _sKindleGen := oIniFile_.ReadString('SETTINGS','KINDLEGEN', sAppDir_ + 'kindlegen');
+  _sKindleGen := oIniFile_.ReadString('SETTINGS_'+sOS_,'KINDLEGEN', '/Applications/kindlegen');
   _sCompressLevel := Copy(lstCompressOption.Text, 1, 3);  // -c1, -c2
-  _sFilePath := _sKindleGen + ' ' + sAppDir_ + 'mybook.opf ' + _sCompressLevel +
-    ' -dont_append_source ' + _sVerbose;
-  _sCommand := 'open ' + AnsiString(_sFilePath);
-  //ShowMessage(_sCommand);
-  _system(PAnsiChar(_sCommand));
+
+  //!!! _system裡用到的變數都必須用AnString包起來
+  if _sCompressLevel = '-c1' then begin
+    _system(PAnsiChar(AnsiString(sAppDir_)+'kindlegen "' +
+      AnsiString(sAppDir_) + 'mybook.opf" "-c1" -o "' +
+      AnsiString(sTitle_) +'_' + AnsiString(sAuthor_) +'.mobi"'));
+  end else begin
+    _system(PAnsiChar(AnsiString(sAppDir_)+'kindlegen "' +
+      AnsiString(sAppDir_) + 'mybook.opf" "-c2" -o "' +
+      AnsiString(sTitle_) +'_' + AnsiString(sAuthor_) +'.mobi"'));
+  end;
+
   MemoStatus.Lines.Add('  執行命令以產生電子書: ' + Copy(_sCommand, 6, 255));
   MemoStatus.Lines.Add('  電子書 ' + sOutputBasename_ + '.mobi 將產生於m2m.app所在資料夾');
 {$ENDIF MACOS}
@@ -374,9 +392,8 @@ var
   _sFilename, _sDatetime: String;
   _sLine, _sReplacedLine, _sMarkdownFilename: String;
   today : TDateTime;
-  re : TRegEx;
   _hasHashMark: Boolean;
-  _lstExpr, _lstSymbol: TStringList;
+  _lstExpr, _lstSymbol, _lstOrgContent: TStringList;
 begin
   sAuthor_ := '';
   sTitle_ := '';
@@ -386,12 +403,18 @@ begin
   //btnSendMail.Visible := false;
 
   sFilename_ := edtMarkdown.Text;
+  if not FileExists(sFilename_) then begin
+    ShowMessage('檔案不存在：' + sFilename_ + ' !');
+    exit;
+  end;
+
   _sFilename := ExtractFileName(sFilename_);
   MemoStatus.Lines.clear;
   MemoStatus.Lines.Add('==============================');
   MemoStatus.Lines.Add('1.讀檔');
   MemoStatus.Lines.Add('  開始讀取 ' + edtMarkdown.Text + ' 的內容...');
   oIniFile_.WriteString('RECENT_FILES', '1', edtMarkdown.Text);
+  oInifile_.UpdateFile;
 
   // 由檔名取出書名和作者
   _iPos := Pos('作者：', _sFilename);
@@ -414,19 +437,18 @@ begin
     end;
   end;
 
-  //memo1.Lines.LoadFromFile(UTF8ToAnsi(sFilename_));
   txtMsg.Visible := true;
   today := now;
-  //memo1.Lines.LoadFromFile(sFilename_, TEncoding.UTF8);
+
   lstContent_.Clear;
-  lstContent_.LoadFromFile(sFilename_, TEncoding.UTF8);
+  _lstOrgContent := TStringList.Create;
+  _lstOrgContent.LoadFromFile(sFilename_, TEncoding.UTF8);
   today := now;
-  //Memo1.Lines.EndUpdate;
-  //Memo1.Lines.Text := lst.Text;
+
   txtMsg.Visible := false;
   if (sTitle_ = '') then begin
     for i := 0 to 10 do begin
-      _sLine := lstContent_.Strings[i];  //.Lines.Strings[i];
+      _sLine := _lstOrgContent.Strings[i];  //.Lines.Strings[i];
       _iPos := Pos('書名：', _sLine);
       if (_iPos > 0) then begin
         sTitle_ := Copy(_sLine, _iPos+3, 100);
@@ -437,7 +459,7 @@ begin
 
   if (sAuthor_ = '') then begin
     for i := 0 to 10 do begin
-      _sLine := lstContent_.Strings[i];
+      _sLine := _lstOrgContent.Strings[i];
       _iPos := Pos('作者：', _sLine);
       if (_iPos > 0) then begin
         sAuthor_ := Copy(_sLine, _iPos+3, 100);
@@ -446,7 +468,7 @@ begin
     end;
   end;
   if sAuthor_ = '' then begin
-    sAuthor_ := lstContent_.Strings[1];
+    sAuthor_ := _lstOrgContent.Strings[1];
     if sAuthor_ = '' then sAuthor_ := '(未知)';
 
     sAuthor_ := StringReplace(sAuthor_, ':', '：', [rfReplaceAll]);
@@ -455,7 +477,7 @@ begin
   edtAuthor.Text := sAuthor_;
 
   if sTitle_ = '' then begin
-    sTitle_ := lstContent_.Strings[0];
+    sTitle_ := _lstOrgContent.Strings[0];
     sTitle_ := StringReplace(sTitle_, ':', '：', [rfReplaceAll]);
     sTitle_ := StringReplace(sTitle_, ' ', '_', [rfReplaceAll]);
   end;
@@ -476,48 +498,45 @@ begin
     end;
   end;
   btnReadFile.Enabled := false;
+  self.Updating;
 
   _hasHashMark := false;
-  //txtCount.BeginUpdate;
-  if chkMarkdown.IsChecked then begin
-    for i := 0 to lstContent_.Count-1 do begin
-      _sLine := lstContent_.Strings[i];
-      if Copy(_sLine,1,1) = '#' then begin
-        _hasHashMark := true;
-        continue;
-      end else if Tregex.IsMatch(_sLine, '^(\s)*') then begin
-        _sLine := Trim(_sLine);
-        lstContent_.Strings[i] := _sLine;
-      end;
+  for i := 0 to _lstOrgContent.Count-1 do begin
+    _sLine := _lstOrgContent.Strings[i];
+    if Copy(_sLine,1,1) = '#' then begin
+      _hasHashMark := true;
+      continue;
+    end else if Tregex.IsMatch(_sLine, '^(\s)*') then begin
+      _sLine := Trim(_sLine);
+    end;
 
-      if Length(_sLine) <= 2 then continue;
-      if i=107 then begin
-        _iPos := 1;
-      end;
+    // 刪除空行
+    if (chkRemoveNewline.IsChecked) and (Length(_sLine)=0) then begin
+      continue;
+    end;
 
-      _sReplacedLine := symbolReplace(_sLine, _lstSymbol);  // 標點符號轉換
-      if _sReplacedLine <> _sLine then begin
-        lstContent_.Strings[i] := _sReplacedLine;
-      end;
-
+    if chkMarkdown.IsChecked then begin
       _sReplacedLine := markdown(_sLine, _lstExpr);
       if _sReplacedLine <> _sLine then begin
         _hasHashMark := true;
-        lstContent_.Strings[i] := _sReplacedLine;
+        _sLine := _sReplacedLine;
       end;
     end;
-  end;
 
-  for i := 0 to lstContent_.Count-1 do begin
+     _sReplacedLine := symbolReplace(_sLine, _lstSymbol);  // 標點符號轉換
+    if _sReplacedLine <> _sLine then begin
+      _sLine := _sReplacedLine;
+    end;
+
+    lstContent_.Add(_sLine);
     if Copy(_sLine,1,1) = '#' then begin
       _hasHashMark := true;
-      break;
     end;
-  end;
+  end;  // loop內容
 
   //txtCount.EndUpdate;
-  _lstExpr.Destroy;
-  _lstSymbol.Destroy;
+  FreeAndNil(_lstExpr);
+  FreeAndNil(_lstSymbol);
   if chkMarkdown.isChecked then begin
     _sDatetime := DateTimeToStr(now);
     memoStatus.Lines.Add('  結束轉換成Markdown格式... ' + _sDatetime);
@@ -538,11 +557,11 @@ begin
   ///!!! sOutputBasename_ := sTitle_;
   MemoStatus.Lines.Add('  書名：' + sTitle_);
   MemoStatus.Lines.Add('  作者：' + sAuthor_);
-  MemoStatus.Lines.Add('  讀取行數：' + IntToStr(lstContent_.Count));
-
+  MemoStatus.Lines.Add('  讀取行數：' + IntToStr(_lstOrgContent.Count));
 
   btnGenFiles.Visible := true;
   btnGenFiles.setFocus;
+  FreeAndNil(_lstOrgContent);
 end;
 
 
@@ -550,50 +569,21 @@ procedure TForm1.btnSettingsClick(Sender: TObject);
 var
   _sEditor, _sFilePath: String;
 begin
-  _sEditor := oIniFile_.ReadString('EDITOR', 'HTML', 'notepad');
-  _sFilePath := sAppDir_+'m2m.ini';
-
-{$IFDEF MSWINDOWS}
-  ShellExecute(0, PChar('open'), PChar(_sEditor), PChar(_sFilePath), nil, SW_SHOW);
-{$ENDIF MSWINDOWS}
-
-{$IFDEF MACOS}
-  _system(PAnsiChar('open ' + '"' + _sFilePath + '"'));
-{$ENDIF MACOS}
-
+  open(sAppDir_+'m2m.ini');
 end;
 
 procedure TForm1.btnTOCHTMLClick(Sender: TObject);
 var
   _sEditor, _sFilePath: String;
 begin
-  _sEditor := oIniFile_.ReadString('EDITOR', 'HTML', 'notepad');
-  _sFilePath := sAppDir_+'toc.html';
-
-{$IFDEF MSWINDOWS}
-  ShellExecute(0, PChar('open'), PChar(_sEditor), PChar(_sFilePath), nil, SW_SHOW);
-{$ENDIF MSWINDOWS}
-
-{$IFDEF MACOS}
-  _system(PAnsiChar('open ' + '"' + _sFilePath + '"'));
-{$ENDIF MACOS}
-
+  open(sAppDir_+'toc.html');
 end;
 
 procedure TForm1.btnTOCNCXClick(Sender: TObject);
 var
   _sEditor, _sFilePath: String;
 begin
-  _sEditor := oIniFile_.ReadString('EDITOR', 'HTML', 'notepad');
-  _sFilePath := sAppDir_+'toc.ncx';
-
-{$IFDEF MSWINDOWS}
-  ShellExecute(0, PChar('open'), PChar(_sEditor), PChar(_sFilePath), nil, SW_SHOW);
-{$ENDIF MSWINDOWS}
-
-{$IFDEF MACOS}
-  _system(PAnsiChar('open ' + '"' + _sFilePath + '"'));
-{$ENDIF MACOS}
+  open(sAppDir_+'toc.ncx');
 end;
 
 function TForm1.markdown(sText: String; lstExpr: TStringList): String;
@@ -659,6 +649,7 @@ end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
+  oIniFile_.WriteString('RECENT_FILES','1', edtMarkdown.Text);
   oIniFile_.Destroy;
   lstContent_.Destroy;
 end;
@@ -668,9 +659,26 @@ var
   _sText: String;
   _iPos, _iPos1, _iPos2: Integer;
 begin
-  Application.ShowHint := true;
-  sAppDir_ := GetCurrentDir() + PathDelim;  // ExtractFileDir(Application.GetNamePath) + PathDelim;
+
+{$IFDEF DEBUG}
 {$IFDEF MACOS}
+  edtMarkdown.Text := '/Users/jerry/aaa.txt';
+  chkMarkdown.IsChecked := true;
+  chkLeadingSpaces.IsChecked := true;
+  chkVertical.IsChecked := true;
+{$ENDIF}
+{$ENDIF}
+
+  Application.ShowHint := true;
+
+{$IFDEF MSWINDOWS}
+  sAppDir_ := GetCurrentDir() + PathDelim;  // ExtractFileDir(Application.GetNamePath) + PathDelim;
+  sOS_ := 'WIN';
+{$ENDIF}
+
+{$IFDEF MACOS}
+  sAppDir_ := ParamStr(0);
+  sOS_ := 'MACOS';
   _iPos1 := Pos('M2M.app', sAppDir_);
   _iPos2 := Pos('m2m.app', sAppDir_);
   if (_iPos1 > 0) then begin
@@ -678,14 +686,15 @@ begin
   end else if (_iPos2 > 0) then begin
     sAppDir_ := Copy(sAppDir_, 1, _iPos2-1);
   end;
+  chkVerbose.Visible := false;
 {$ENDIF MACOS}
 
   self.Caption := self.Caption + ' ' + _VERSION_;
 //  oIniFile_ := TIniFile.Create(sAppDir_ + 'm2m.ini', TEncoding.UTF8);
   oIniFile_ := TMemIniFile.Create(sAppDir_ + 'm2m.ini', TEncoding.UTF8);
-  sTextFolder_ := oIniFile_.ReadString('SETTINGS', 'TEXT_FOLDER', sAppDir_);
+  sTextFolder_ := oIniFile_.ReadString('SETTINGS_'+sOS_, 'TEXT_FOLDER', sAppDir_);
   OpenDialog1.InitialDir := sTextFolder_;
-  edtCounter.Text := oIniFile_.ReadString('SETTINGS', 'LEVEL2_MAX_COUNT', '20');
+  edtCounter.Text := oIniFile_.ReadString('SETTINGS_'+sOS_, 'LEVEL2_MAX_COUNT', '20');
   iLevel2MaxCount_ := StrToInt(edtCounter.Text);
 
   //_sText := Clipboard.AsText;
@@ -719,7 +728,7 @@ end;
 
 procedure TForm1.btnOpenFileClick(Sender: TObject);
 begin
-  OpenDialog1.InitialDir := oIniFile_.ReadString('SETTINGS', 'TEXT_FOLDER', sAppDir_);
+  OpenDialog1.InitialDir := oIniFile_.ReadString('SETTINGS_'+sOS_, 'TEXT_FOLDER', sAppDir_);
   if OpenDialog1.Execute then begin
     sFilename_ := OpenDialog1.Filename;
     //Memo1.Lines.Clear;
@@ -1008,7 +1017,7 @@ begin
   canvas := Image1.Bitmap.canvas;
   canvas.BeginScene();
   canvas.Stroke.Kind := TBrushKind.bkSolid;
-  canvas.Font.Size := 48;
+  canvas.Font.Size := 72;
   //Image1.Bitmap.canvas.StrokeThickness := 1;
   canvas.Fill.Color := TAlphaColors.Black;
   //mRect.Create(100, 229, 300, 250);
@@ -1020,21 +1029,21 @@ begin
     _sTitle2 := '';
   end;
 
-  mRect := TRectF.Create(50, 110, 580, 800);
+  mRect := TRectF.Create(50, 150, 580, 800);
   Canvas.FillText(mRect, _sTitle1, false, 100,
       [{TFillTextFlag.RightToLeft}], TTextAlign.Leading, TTextAlign.Leading);
 
-  mRect := TRectF.Create(50, 180, 580, 800);
+  mRect := TRectF.Create(50, 250, 580, 800);
   Canvas.FillText(mRect, _sTitle2, false, 100,
       [{TFillTextFlag.RightToLeft}], TTextAlign.Leading, TTextAlign.Leading);
 
-  canvas.Font.Size := 32;
-  mRect := TRectF.Create(50, 500, 550, 800);
+  canvas.Font.Size := 64;
+  mRect := TRectF.Create(50, 380, 550, 800);
   Canvas.FillText(mRect, edtAuthor.Text, false, 100,
     [{TFillTextFlag.RightToLeft}], TTextAlign.Leading, TTextAlign.Leading);
 
   _sNow := FormatDateTime('yyyy"/"mm"/"dd', Now);
-  canvas.Font.Size := 32;
+  canvas.Font.Size := 64;
   mRect := TRectF.Create(50, 600, 550, 800);
   Canvas.FillText(mRect, _sNow, false, 100,
     [{TFillTextFlag.RightToLeft}], TTextAlign.Leading, TTextAlign.Leading);
