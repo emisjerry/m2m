@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 0
   Top = 0
   Caption = 'M2M Markdown'#36681#25563#33267'MOBI'#24037#20855
-  ClientHeight = 592
+  ClientHeight = 545
   ClientWidth = 709
   Position = DesktopCenter
   FormFactor.Width = 320
@@ -26,11 +26,11 @@ object Form1: TForm1
       TextSettings.Font.Family = 'Microsoft JhengHei'
       TextSettings.Font.Size = 14.000000000000000000
       Text = 'Markdown'#27284#21517
-      TabOrder = 2
+      TabOrder = 3
     end
     object edtMarkdown: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 3
+      TabOrder = 4
       TextSettings.Font.Size = 14.000000000000000000
       Position.X = 136.000000000000000000
       Position.Y = 16.000000000000000000
@@ -57,7 +57,7 @@ object Form1: TForm1
       Anchors = [akTop]
       StyledSettings = [Style, FontColor]
       Position.X = 17.000000000000000000
-      Position.Y = 144.000000000000000000
+      Position.Y = 153.000000000000000000
       Size.Width = 97.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -65,14 +65,14 @@ object Form1: TForm1
       TextSettings.Font.Size = 14.000000000000000000
       TextSettings.HorzAlign = Trailing
       Text = #26360#21517
-      TabOrder = 1
+      TabOrder = 2
     end
     object edtTitle: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 6
+      TabOrder = 7
       TextSettings.Font.Size = 14.000000000000000000
       Position.X = 136.000000000000000000
-      Position.Y = 138.000000000000000000
+      Position.Y = 147.000000000000000000
       Size.Width = 281.000000000000000000
       Size.Height = 32.000000000000000000
       Size.PlatformDefault = False
@@ -82,7 +82,7 @@ object Form1: TForm1
       Anchors = [akTop]
       StyledSettings = [Style, FontColor]
       Position.X = 17.000000000000000000
-      Position.Y = 184.000000000000000000
+      Position.Y = 189.000000000000000000
       Size.Width = 97.000000000000000000
       Size.Height = 17.000000000000000000
       Size.PlatformDefault = False
@@ -90,14 +90,14 @@ object Form1: TForm1
       TextSettings.Font.Size = 14.000000000000000000
       TextSettings.HorzAlign = Trailing
       Text = #20316#32773
-      TabOrder = 0
+      TabOrder = 1
     end
     object edtAuthor: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 5
+      TabOrder = 6
       TextSettings.Font.Size = 14.000000000000000000
       Position.X = 136.000000000000000000
-      Position.Y = 178.000000000000000000
+      Position.Y = 183.000000000000000000
       Size.Width = 281.000000000000000000
       Size.Height = 32.000000000000000000
       Size.PlatformDefault = False
@@ -106,11 +106,11 @@ object Form1: TForm1
     object btnReadFile: TButton
       StyledSettings = [Family, Style, FontColor]
       Position.X = 440.000000000000000000
-      Position.Y = 138.000000000000000000
+      Position.Y = 147.000000000000000000
       Size.Width = 97.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 10
+      TabOrder = 11
       Text = '1. '#35712#27284
       TextSettings.Font.Size = 14.000000000000000000
       OnClick = btnReadFileClick
@@ -132,11 +132,11 @@ object Form1: TForm1
     object btnGenFiles: TButton
       StyledSettings = [Family, Style, FontColor]
       Position.X = 544.000000000000000000
-      Position.Y = 138.000000000000000000
+      Position.Y = 147.000000000000000000
       Size.Width = 97.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 9
+      TabOrder = 10
       Text = '2.'#29986#29983#35373#23450#27284
       TextSettings.Font.Size = 14.000000000000000000
       OnClick = btnGenFilesClick
@@ -144,11 +144,11 @@ object Form1: TForm1
     object btnGenMobi: TButton
       StyledSettings = [Family, Style, FontColor]
       Position.X = 440.000000000000000000
-      Position.Y = 176.000000000000000000
+      Position.Y = 185.000000000000000000
       Size.Width = 97.000000000000000000
       Size.Height = 33.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 8
+      TabOrder = 9
       Text = '3.'#29986#29983'MOBI'#27284
       TextSettings.Font.Size = 14.000000000000000000
       OnClick = btnGenMobiClick
@@ -160,12 +160,12 @@ object Form1: TForm1
       TextSettings.FontColor = claCrimson
       Text = #35712#27284#20013'......'
       Visible = False
-      TabOrder = 11
+      TabOrder = 12
     end
     object Button1: TButton
       Position.X = 624.000000000000000000
       Position.Y = 136.000000000000000000
-      TabOrder = 12
+      TabOrder = 13
       Text = 'Button1'
       Visible = False
       OnClick = Button1Click
@@ -179,7 +179,7 @@ object Form1: TForm1
       Size.PlatformDefault = False
       TextSettings.FontColor = claRed
       Visible = False
-      TabOrder = 13
+      TabOrder = 14
     end
     object chkMarkdown: TCheckBox
       StyledSettings = [Family, Style, FontColor]
@@ -188,7 +188,7 @@ object Form1: TForm1
       Size.Width = 217.000000000000000000
       Size.Height = 19.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 17
+      TabOrder = 18
       Text = #35712#27284#26178#36681#25563#28858'Markdown'#26684#24335
       TextSettings.Font.Size = 14.000000000000000000
       OnChange = chkMarkdownChange
@@ -228,7 +228,7 @@ object Form1: TForm1
       Size.Width = 209.000000000000000000
       Size.Height = 19.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 16
+      TabOrder = 17
       Text = #27573#33853#38283#38957#25554#20837#20841#20491#20840#24418#31354#30333
       TextSettings.Font.Size = 14.000000000000000000
     end
@@ -239,26 +239,51 @@ object Form1: TForm1
       Size.Width = 209.000000000000000000
       Size.Height = 19.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 15
+      TabOrder = 16
       Text = #25991#23383#30452#25490
       TextSettings.Font.Size = 14.000000000000000000
     end
     object chkRemoveNewline: TCheckBox
       StyledSettings = [Family, Style, FontColor]
       Position.X = 268.000000000000000000
-      Position.Y = 88.000000000000000000
+      Position.Y = 81.000000000000000000
       Size.Width = 209.000000000000000000
       Size.Height = 19.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 14
+      TabOrder = 15
       Text = #21034#38500#27573#33853#38291#30340#31354#34892
       TextSettings.Font.Size = 14.000000000000000000
+    end
+    object Label6: TLabel
+      Anchors = [akTop]
+      StyledSettings = [Style, FontColor]
+      Position.X = 17.000000000000000000
+      Position.Y = 108.000000000000000000
+      Size.Width = 97.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TextSettings.Font.Family = 'Microsoft JhengHei'
+      TextSettings.Font.Size = 14.000000000000000000
+      TextSettings.HorzAlign = Trailing
+      Text = #31456#31680#26684#24335
+      Visible = False
+      TabOrder = 0
+    end
+    object lstChapterFormat: TComboBox
+      DropDownCount = 99
+      Position.X = 136.000000000000000000
+      Position.Y = 106.000000000000000000
+      Size.Width = 281.000000000000000000
+      Size.Height = 22.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 19
+      Visible = False
     end
   end
   object Panel2: TPanel
     Align = Client
     Size.Width = 709.000000000000000000
-    Size.Height = 344.000000000000000000
+    Size.Height = 297.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 1
     object Label4: TLabel
@@ -433,7 +458,7 @@ object Form1: TForm1
   end
   object Panel3: TPanel
     Align = MostBottom
-    Position.Y = 569.000000000000000000
+    Position.Y = 522.000000000000000000
     Size.Width = 709.000000000000000000
     Size.Height = 23.000000000000000000
     Size.PlatformDefault = False
@@ -456,7 +481,7 @@ object Form1: TForm1
   end
   object OpenDialog1: TOpenDialog
     Left = 24
-    Top = 201
+    Top = 281
   end
   object ImageList1: TImageList
     Source = <
@@ -651,6 +676,6 @@ object Form1: TForm1
           end>
       end>
     Left = 80
-    Top = 201
+    Top = 313
   end
 end

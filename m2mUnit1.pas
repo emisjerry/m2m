@@ -8,7 +8,7 @@ uses
   FMX.Edit, FMX.Controls.Presentation, System.ImageList, FMX.ImgList,
   IniFiles, FMX.EditBox, FMX.NumberBox, FMX.ListBox, FMX.Layouts, FMX.ScrollBox,
   FMX.Memo, FMX.Surfaces, FMX.Consts, RegularExpressions,
-  RegularExpressionsCore, System.IoUtils,
+  RegularExpressionsCore, System.IoUtils, {System.Threading,}
 
 {$IFDEF MSWINDOWS}
 Winapi.ShellAPI, Winapi.Windows, FMX.Objects;
@@ -62,6 +62,8 @@ type
     chkVertical: TCheckBox;
     txtLink: TLabel;
     chkRemoveNewline: TCheckBox;
+    Label6: TLabel;
+    lstChapterFormat: TComboBox;
     procedure btnOpenFileClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnReadFileClick(Sender: TObject);
@@ -333,7 +335,9 @@ begin
 
   GroupBox1.Visible := true;
   btnPreview.Visible := false;
+{$IFDEF MACOS}
   btnBookBat.Visible := false;
+{$ENDIF}
   btnGenMOBI.SetFocus;
 end;
 
@@ -390,7 +394,7 @@ procedure TForm1.btnReadFileClick(Sender: TObject);
 var
   i, _iPos, _iPos2: Integer;
   _sFilename, _sDatetime: String;
-  _sLine, _sReplacedLine, _sMarkdownFilename: String;
+  _sLine, _sReplacedLine, _sMarkdownFilename, _sChapter: String;
   today : TDateTime;
   _hasHashMark: Boolean;
   _lstExpr, _lstSymbol, _lstOrgContent: TStringList;
@@ -656,8 +660,9 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 var
-  _sText: String;
-  _iPos, _iPos1, _iPos2: Integer;
+  _sText, _sChapter: String;
+  _iPos, _iPos1, _iPos2, i: Integer;
+  _lstExpr: TStringList;
 begin
 
 {$IFDEF DEBUG}
@@ -720,10 +725,25 @@ begin
   //btnSendMail.Visible := false;
   //ShowMessage(sToday_);
 
-  // Init
-  //SMTP1.OnError := @SMTP1Error;
-  //FMimeStream := TMimeStream.Create;
-  //FMimeStream.AddTextSection(''); // for the memo
+  {
+  _lstExpr := TStringList.Create;
+  oIniFile_.ReadSectionValues('RegularExpressions', _lstExpr);
+  lstChapterFormat.Items.Add('(設定全部)');
+  for i := 0 to _lstExpr.Count-1 do begin
+    _sChapter := _lstExpr.Strings[i];
+    _iPos := Pos('=', _sChapter);
+    if _iPos > 0 then begin
+      _sChapter := Copy(_sChapter, 1, _iPos-1);
+      _sChapter := StringReplace(_sChapter, '^', '', []);
+      _sChapter := StringReplace(_sChapter, '(.*)', 'XX', []);
+      _sChapter := StringReplace(_sChapter, '(.*)', 'YY', []);
+      _sChapter := StringReplace(_sChapter, '(.*)', 'ZZ', []);
+      _sChapter := StringReplace(_sChapter, '(.*)', 'zz', []);
+      lstChapterFormat.Items.Add(_sChapter);
+    end;
+  end;
+  FreeAndNil(_lstExpr);
+  }
 end;
 
 procedure TForm1.btnOpenFileClick(Sender: TObject);
@@ -1017,27 +1037,27 @@ begin
   canvas := Image1.Bitmap.canvas;
   canvas.BeginScene();
   canvas.Stroke.Kind := TBrushKind.bkSolid;
-  canvas.Font.Size := 72;
+  canvas.Font.Size := 96;
   //Image1.Bitmap.canvas.StrokeThickness := 1;
   canvas.Fill.Color := TAlphaColors.Black;
   //mRect.Create(100, 229, 300, 250);
-  if Length(edtTitle.Text) > 10 then begin
-    _sTitle1 := Copy(edtTitle.Text, 1, 10);
-    _sTitle2 := Copy(edtTitle.Text, 10, 20);
+  if Length(edtTitle.Text) > 5 then begin
+    _sTitle1 := Copy(edtTitle.Text, 1, 5);
+    _sTitle2 := Copy(edtTitle.Text, 6, 20);
   end else begin
     _sTitle1 := edtTitle.Text;
     _sTitle2 := '';
   end;
 
-  mRect := TRectF.Create(50, 150, 580, 800);
+  mRect := TRectF.Create(50, 100, 580, 800);
   Canvas.FillText(mRect, _sTitle1, false, 100,
       [{TFillTextFlag.RightToLeft}], TTextAlign.Leading, TTextAlign.Leading);
 
-  mRect := TRectF.Create(50, 250, 580, 800);
+  mRect := TRectF.Create(50, 200, 580, 800);
   Canvas.FillText(mRect, _sTitle2, false, 100,
       [{TFillTextFlag.RightToLeft}], TTextAlign.Leading, TTextAlign.Leading);
 
-  canvas.Font.Size := 64;
+  canvas.Font.Size := 72;
   mRect := TRectF.Create(50, 380, 550, 800);
   Canvas.FillText(mRect, edtAuthor.Text, false, 100,
     [{TFillTextFlag.RightToLeft}], TTextAlign.Leading, TTextAlign.Leading);
